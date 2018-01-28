@@ -5,17 +5,20 @@ services:
    image: redis
    volumes: 
       - ./redis.conf:/usr/local/etc/redis/redis.conf
-      - ./data:/data
+      # - ./data:/data  
+   networks:
+      - back-tier
    ports:
       - 6379:6379  
    command: redis-server --appendonly yes
   mongo:
    image: mongo
+   networks:
+      - back-tier
    volumes: 
       - ~/data/db:/data/db 
    ports:
       - 27017:27017
-   command: mongod --auth
   tim:
     image: tim
     build: ./Tim
@@ -28,15 +31,9 @@ services:
     depends_on:
       - mongo
     ports:
-      - 8888:8888
-  nginx:
-    image: nginx_tim
-    build: ./nginx
-    ports:
-      - 8866:8866  
-      - 80:80  
-    links:
-      - tim
-    # volumes: 
-    #   - ./nginx/lzukuan.conf:/etc/nginx/conf.d/lzukuan.conf
-
+      - 8888:8888  
+    networks:
+      - back-tier
+networks:
+  back-tier:
+    driver: bridge
