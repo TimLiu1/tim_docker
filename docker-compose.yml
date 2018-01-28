@@ -1,5 +1,4 @@
 version: '2.1'
-
 services:
   redis:
    image: redis
@@ -37,6 +36,3 @@ services:
       - 80:80  
     links:
       - tim
-    # volumes: 
-    #   - ./nginx/lzukuan.conf:/etc/nginx/conf.d/lzukuan.conf
-
